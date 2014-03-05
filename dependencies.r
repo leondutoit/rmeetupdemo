@@ -1,11 +1,26 @@
 #!/usr/bin/Rscript --vanilla
 
-options("repos"="http://cran.uib.no/")
-install.packages("codetools", dep = TRUE)
-install.packages("devtools", dep = TRUE)
-install.packages(c("DBI", "RPostgreSQL"))
-install.packages("Rcpp", type = "source")
-install.packages(c("ggplot2", "dplyr"), dep = TRUE)
+# choose a download mirror
+options("repos" = "http://cran.uib.no/")
 
-# TODO (Leon) make this work somehow
-devtools::install_github(c("hadley/testthat", "rstudio/shiny", "rstudio/ggvis"))
+# C++ dependency
+install.packages("Rcpp", type = "source")
+
+# tools
+install.packages(
+  c("codetools",
+    "devtools",
+    "DBI",
+    "RPostgreSQL",
+    "RCurl",
+    "httr",
+    "jsonlite",
+    "ggplot2",
+    "dplyr"),
+  dep = TRUE)
+
+# viz
+devtools::install_github(
+  c("hadley/testthat",
+    "rstudio/shiny",
+    "rstudio/ggvis"))
