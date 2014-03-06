@@ -37,6 +37,7 @@ set_classes <- function(df) {
   class(df[[2]]) <- "numeric"
   class(df[[3]]) <- "character"
   class(df[[4]]) <- "character"
+  class(df[[5]]) <- "character"
   df
 }
 
@@ -55,9 +56,13 @@ json_to_df <- function(json_data) {
   make_df(data, values)
 }
 
-create_immigration_df <- function() {
+create_immigration_df <- function(also_csv = FALSE) {
   url <- "http://data.ssb.no/api/v0/dataset/48670.json?lang=en"
   data <- get_data_from_api(url)
+  if (also_csv) {
+    out_data <- json_to_df(data)
+    write.csv(out_data, "ssb_immigration_data.csv", row.names = FALSE)
+  }
   immigration <- json_to_df(data)
 }
 
