@@ -16,6 +16,7 @@ install.packages(
     "httr",
     "jsonlite",
     "ggplot2",
+    "scales",
     "dplyr"),
   dep = TRUE)
 
