@@ -88,7 +88,7 @@ test_that("data extracted from JSON has the expected classes at all depths", {
   expect_equal(class(data_from_code[[4]][[1]]), class(correct_df_list[[4]][[1]]))
   expect_equal(class(data_from_code[[4]][[2]]), class(correct_df_list[[4]][[2]]))
   expect_equal(class(data_from_code[[4]][[3]]), class(correct_df_list[[4]][[3]]))
-  expect_equal(class(data_from_code[[5]][[1]]), class(correct_df_list[[1]][[1]]))
+  expect_equal(class(data_from_code[[5]][[1]]), class(correct_df_list[[5]][[1]]))
 
   }
 )
