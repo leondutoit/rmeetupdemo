@@ -13,7 +13,7 @@ get_data_from_api <- function(url) {
 }
 
 get_data_from_json <- function(json_data) {
-  all_data <- Map(
+  Map(
     function(x) { json_data[['dimension']][[x]][['category']][['label']] },
       names(json_data[['dimension']]))[1:5]
 }
@@ -33,11 +33,10 @@ prepare_all_data <- function(dfs) {
 }
 
 set_classes <- function(df) {
-  class(df[[1]]) <- "character"
-  class(df[[2]]) <- "numeric"
-  class(df[[3]]) <- "character"
-  class(df[[4]]) <- "character"
-  class(df[[5]]) <- "character"
+  Map(
+    function(x, y) { class(df[[x]]) <<- y },
+    c(1, 2, 3, 4, 5),
+    c("character", "numeric", "character", "character", "character"))
   df
 }
 
@@ -68,17 +67,27 @@ create_immigration_df <- function(also_csv = FALSE) {
 
 immigration <- create_immigration_df()
 
-elaborate_plot <- ggplot(
-  immigration,
-  aes(Tid, Values)) +
-    geom_bar(stat = "identity") +
-    facet_grid(Landbakgrunn ~ Kjonn) +
-    scale_y_log10(
-      breaks = trans_breaks("log10", function(x) 10^x),
-      labels = trans_format("log10", math_format(10^.x)))
+elaborate_plot <- function(df) {
+  ggplot(
+    df,
+    aes(Tid, Values)) +
+      geom_bar(stat = "identity") +
+      facet_grid(Landbakgrunn ~ Kjonn) +
+      scale_y_log10(
+        breaks = trans_breaks("log10", function(x) 10^x),
+        labels = trans_format("log10", math_format(10^.x)))
+}
 
-basic_plot <- ggplot(
-  immigration,
-  aes(Tid, Values)) +
-    geom_bar(stat = "identity") +
-    facet_grid(Kjonn ~ Landbakgrunn)
+basic_plot <- function(df) {
+  ggplot(
+    df,
+    aes(Tid, Values)) +
+      geom_bar(stat = "identity") +
+      facet_grid(Kjonn ~ Landbakgrunn)
+}
+
+remove_zero_values <- function(df) {
+  # We see we can remove some values for visual clarity
+  subset(df, subset = !(Landbakgrunn %in% c("Stateless", "Uoppgitt")))
+}
+
