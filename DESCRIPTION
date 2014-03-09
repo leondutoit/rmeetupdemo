@@ -1,8 +1,8 @@
 Package: r-meetup-demo
-Title:
+Title: r-meetup-demo: webapps for data science with R
 Description: gets immigration data from SSB
 Version: 0.1
-Authors@R: Leon du Toit
+Authors@R: Leon du Toit <dutoit.leon@gmail.com>
 Depends: R (>= 3.0.2)
 License: MIT
 LazyData: true
