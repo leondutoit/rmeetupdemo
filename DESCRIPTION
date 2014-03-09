@@ -5,5 +5,11 @@ Version: 0.1
 Author: Leon du Toit <dutoit.leon@gmail.com>
 Depends:
     R (>= 3.0.2)
+Imports:
+    RCurl,
+    httr,
+    jsonlite,
+    scales,
+    ggplot2
 License: MIT
 LazyData: true
