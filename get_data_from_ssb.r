@@ -1,12 +1,19 @@
 
+# Utility functions to get immigration data from SSB,
+# explore graphically and write data to csv file
+# For and overview see url and dataset with following id
+# URL: http://data.ssb.no/api/?lang=en
+# id: 48670
+# Example usage
+# > source('get_data_from_ssb.r')
+# > basic_plot(immigration)
+# > elaborate_plot(remove_zero_values(immigration))
+
 library(RCurl)
 library(httr)
 library(jsonlite)
 library(scales)
 library(ggplot2)
-
-# overview: http://data.ssb.no/api/?lang=en
-# id = 48670
 
 get_data_from_api <- function(url) {
   fromJSON(url)
@@ -55,12 +62,24 @@ json_to_df <- function(json_data) {
   make_df(data, values)
 }
 
-create_immigration_df <- function(also_csv = FALSE) {
+remove_zero_values <- function(df) {
+  # We see we can remove some values for visual clarity
+  subset(df, subset = !(Landbakgrunn %in% c("Stateless", "Uoppgitt")))
+}
+
+write_csv <- function(json_data, remove = FALSE) {
+  out_data <- json_to_df(json_data)
+  if (remove) {
+    out_data <- remove_zero_values(out_data)
+  }
+  write.csv(out_data, "ssb_immigration_data.csv", row.names = FALSE)
+}
+
+create_immigration_df <- function(also_csv = FALSE, remove = FALSE) {
   url <- "http://data.ssb.no/api/v0/dataset/48670.json?lang=en"
   data <- get_data_from_api(url)
   if (also_csv) {
-    out_data <- json_to_df(data)
-    write.csv(out_data, "ssb_immigration_data.csv", row.names = FALSE)
+    write_csv(data, remove = remove)
   }
   immigration <- json_to_df(data)
 }
@@ -85,9 +104,3 @@ basic_plot <- function(df) {
       geom_bar(stat = "identity") +
       facet_grid(Kjonn ~ Landbakgrunn)
 }
-
-remove_zero_values <- function(df) {
-  # We see we can remove some values for visual clarity
-  subset(df, subset = !(Landbakgrunn %in% c("Stateless", "Uoppgitt")))
-}
-
