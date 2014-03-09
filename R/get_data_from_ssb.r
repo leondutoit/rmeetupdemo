@@ -72,7 +72,10 @@ write_csv <- function(json_data, remove = FALSE) {
   if (remove) {
     out_data <- remove_zero_values(out_data)
   }
-  write.csv(out_data, "ssb_immigration_data.csv", row.names = FALSE)
+  write.csv(
+    out_data,
+    "../data/ssb_immigration_data.csv",
+    row.names = FALSE)
 }
 
 create_immigration_df <- function(also_csv = FALSE, remove = FALSE) {

@@ -1,8 +1,6 @@
 
 library(testthat)
-source("get_data_from_ssb.r")
-
-context("testing JSON to data frame parsing")
+source("../../R/get_data_from_ssb.r", chdir = TRUE)
 
 get_test_json <- function() {
   fromJSON("another.json")
@@ -54,6 +52,8 @@ create_test_values <- function() {
     Values = c(2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89))
   correct_values
 }
+
+context("testing JSON to data frame parsing")
 
 test_that("data extracted from JSON has the expected classes at all depths", {
 
