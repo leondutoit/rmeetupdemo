@@ -87,8 +87,6 @@ create_immigration_df <- function(also_csv = FALSE, remove = FALSE) {
   immigration <- json_to_df(data)
 }
 
-immigration <- create_immigration_df()
-
 elaborate_plot <- function(df) {
   ggplot(
     df,
