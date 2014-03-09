@@ -1,5 +1,6 @@
 
 library(testthat)
+library(jsonlite)
 source("../../R/get_data_from_ssb.r", chdir = TRUE)
 
 get_test_json <- function() {
