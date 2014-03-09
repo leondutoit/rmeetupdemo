@@ -1,4 +1,5 @@
 
+# TODO (Leon) revisit docs
 # Utility functions to get immigration data from SSB,
 # explore graphically and write data to csv file
 # For and overview see url and dataset with following id
@@ -10,13 +11,11 @@
 # > basic_plot(immigration)
 # > elaborate_plot(remove_zero_values(immigration))
 
-# TODO: handle this in the devtools way
-# Remove once tested
-library(RCurl)
-library(httr)
-library(jsonlite)
-library(scales)
-library(ggplot2)
+#' @import RCurl
+#' @import httr
+#' @import jsonlite
+#' @import ggplot2
+#' @import scales
 
 get_data_from_api <- function(url) {
   fromJSON(url)
