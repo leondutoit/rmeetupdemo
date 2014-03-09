@@ -1,5 +1,5 @@
-Package: r-meetup-demo
-Title: r-meetup-demo: webapps for data science with R
+Package: rmeetupdemo
+Title: rmeetupdemo: webapps for data science with R
 Description: gets immigration data from SSB
 Version: 0.1
 Author: Leon du Toit <dutoit.leon@gmail.com>
