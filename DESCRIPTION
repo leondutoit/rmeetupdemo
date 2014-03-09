@@ -2,7 +2,7 @@ Package: r-meetup-demo
 Title:
 Description: gets immigration data from SSB
 Version: 0.1
-Authors@R: # getOptions('devtools.desc.author')
+Authors@R: Leon du Toit
 Depends: R (>= 3.0.2)
-License: # getOptions('devtools.desc.license')
+License: MIT
 LazyData: true
