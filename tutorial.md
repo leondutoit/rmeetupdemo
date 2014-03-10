@@ -65,9 +65,87 @@ Subsetting and indexing into data structures. There are two types of subsetting:
 # let's have a look what they are
 > ls()
 [1] "dat"  "li"   "m"    "vec"  "vec1"
->
+
+# a vector is atomic - no simplification possible
+> vec[1]
+[1] 1
+
+> class(vec[1])
+[1] "numeric"
+
+# matrices are vectors with a dimension attribute - attributes are metadata
+> attributes(m)
+$dim
+[1] 2 3
+
+# or
+> dim(m)
+[1] 2 3
+
+# lists are not atomic and can be subsetted with simplification
+> li[1]
+$elem1
+[1] 1
+
+> li[[1]]
+[1] 1
+
+> class(li[1])
+[1] "list"
+
+> class(li[[1]])
+[1] "numeric"
+
+# the same goes for dataframes
+> dat[1]
+  x
+1 1
+2 2
+3 3
+4 4
+5 5
+> dat[[1]]
+[1] 1 2 3 4 5
+
+> class(dat[1])
+[1] "data.frame"
+
+> class(dat[[1]])
+[1] "integer"
+
+# other attributes of dataframes
+> names(dat)
+[1] "x" "y"
+> dim(dat)
+[1] 5 2
+
+# the `$` operator is a shorthand for `[[]]` with fuzzy matching
+> dat$mynewcol <- rep(5, 5)
+> dat
+  x     y mynewcol
+1 1  leon        5
+2 2 charl        5
+3 3    du        5
+4 4  toit        5
+5 5   ble        5
+
+> dat$my
+[1] 5 5 5 5 5
+
+# One of the biggest gotchas...
+# when passing a dataframe into a function
+# and using column names for access I always use `[[]]`
+# this is why
+
+> col <- "mynewcol"
+> dat[[col]]
+[1] 5 5 5 5 5
+> dat$col
+NULL
+
 ```
 
+#### Functional goodies
 
 #### Exploring the data
 
