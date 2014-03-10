@@ -17,7 +17,8 @@ install.packages(
     "jsonlite",
     "ggplot2",
     "scales",
-    "dplyr"),
+    "dplyr".
+    "roxygen2"),
   dep = TRUE)
 
 # viz
