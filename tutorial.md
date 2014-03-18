@@ -3,7 +3,9 @@
 
 Outline
 * R ABCs
+* Functional goodies
 * Exploring the data
+* Package development
 * Webapp time
 
 #### R ABCs
@@ -147,9 +149,25 @@ NULL
 
 #### Functional goodies
 
+```r
+
+vectorised
+unlist(Map(function(x) { 10 * x }, 1:10)) ~ 10 * 1:10
+
+lambdas
+first class functions
+HFOs:
+Reduce(sum, Map(function(x) { x*x }, Filter(Negate(function(x) {x %% 2 == 0}), 1:100)))
+sapply
+iffys
+
+```
+
 #### Exploring the data
 
-But first, let's make a package where we can record out explorations and eventually share out analyses with each other.
+
+#### Package development
+
 
 #### Webapp time
 
