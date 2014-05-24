@@ -1,0 +1,144 @@
+
+---
+title: R ABCs - meetup
+output:
+  html_document:
+    toc: true
+    theme: united
+---
+
+
+Outline
+-------
+
+* R ABCs
+* Functional goodies
+* Exploring the data
+* Package development
+* Webapp time
+
+ABCs
+----
+
+Before we begin two things:
+1) R indexes start from 1 not 0. I _think_ the reason is that the core data structure is a vector (as in the algebraic concept) which does not have an index 0;
+2) idiomatic assignment is done with the `<-` operator.
+
+Creating data structures: vector, matrix, list, dataframe.
+
+```{r, message = FALSE, warning = FALSE}
+# vector (homogenous)
+vec <- c(1, 2, 3)
+vec
+
+str(vec)
+
+# matrix (homogenous, I very seldom use them explicitly)
+m <- matrix(1:6, ncol = 3, nrow = 2)
+m
+
+# lists (heterogenuous, often used)
+a_list <- list(elem1 = 1, elem2 = c(1, 2, 3))
+a_list
+
+str(a_list)
+
+# dateframe (the workhorse tabular data structure)
+# think of it as a list of equal length named vectors
+dat <- data.frame(x = 1:5, y = c('leon', 'charl', 'du', 'toit', 'ble'))
+dat
+
+str(dat)
+```
+
+Subsetting and indexing into data structures. There are two types of subsetting: 1) preserving which returns a subset of the data structure as the same class and 2) simplifying, which returns a subset as a class of what that element is. Let's make it concrete. Preserving looks like `[]` while simplifying looks like `[[]]` or `$`.
+
+```{r, message = FALSE, warning = FALSE}
+# we now have some objects in the environment
+# let's have a look what they are
+ls()
+
+# a vector is atomic - no simplification possible
+vec[1]
+
+class(vec[1])
+
+# matrices are vectors with a dimension attribute - attributes are metadata
+attributes(m)
+
+# or
+dim(m)
+
+# lists are not atomic and can be subsetted without simplification
+a_list[1]
+
+# or with
+a_list[[1]]
+
+class(a_list[1])
+
+class(a_list[[1]])
+
+# the same goes for dataframes
+dat[1]
+
+dat[[1]]
+
+class(dat[1])
+
+class(dat[[1]])
+
+# other attributes of dataframes
+names(dat)
+
+dim(dat)
+
+# the `$` operator is a shorthand for `[[]]` with fuzzy matching
+dat$mynewcol <- rep(5, 5)
+dat
+
+dat$my
+
+# One of the biggest gotchas...
+# when passing a dataframe into a function
+# and using column names for access I always use `[[]]`
+# this is why
+
+col <- "mynewcol"
+
+dat[[col]]
+
+#but
+dat$col
+
+
+```
+
+Functional goodies
+------------------
+
+```{r, message = FALSE, warning = FALSE}
+
+#vectorised
+unlist(Map(function(x) { 10 * x }, 1:10)) ~ 10 * 1:10
+
+#lambdas
+#first class functions
+
+Reduce(sum, Map(function(x) { x*x }, Filter(Negate(function(x) {x %% 2 == 0}), 1:100)))
+
+#iffys
+
+```
+
+Exploring the data
+------------------
+
+
+Making a REST app
+-----------------
+
+
+Making a dashboard
+------------------
+
