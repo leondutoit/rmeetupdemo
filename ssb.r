@@ -89,7 +89,7 @@ create_immigration_df <- function(also_csv = FALSE, remove = FALSE) {
   if (also_csv) {
     write_csv(data, remove = remove)
   }
-  immigration <- json_to_df(data)
+  json_to_df(data)
 }
 
 #' @export

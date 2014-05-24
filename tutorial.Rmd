@@ -1,30 +1,20 @@
 
 ---
-title: R ABCs - meetup
+title: R meetup - Oslo (June 2014)
 output:
   html_document:
     toc: true
     theme: united
 ---
 
-
-Outline
--------
-
-* R ABCs
-* Functional goodies
-* Exploring the data
-* Package development
-* Webapp time
-
-ABCs
-----
+Data structures
+---------------
 
 Before we begin two things:
-1) R indexes start from 1 not 0. I _think_ the reason is that the core data structure is a vector (as in the algebraic concept) which does not have an index 0;
-2) idiomatic assignment is done with the `<-` operator.
+* R indexes start from 1 not 0.
+* idiomatic assignment is done with the `<-` operator.
 
-Creating data structures: vector, matrix, list, dataframe.
+Core data structures: vector, matrix, list, dataframe.
 
 ```{r, message = FALSE, warning = FALSE}
 # vector (homogenous)
@@ -120,7 +110,7 @@ Functional goodies
 ```{r, message = FALSE, warning = FALSE}
 
 #vectorised
-unlist(Map(function(x) { 10 * x }, 1:10)) ~ 10 * 1:10
+unlist(Map(function(x) { 10 * x }, 1:10))
 
 #lambdas
 #first class functions
@@ -131,8 +121,8 @@ Reduce(sum, Map(function(x) { x*x }, Filter(Negate(function(x) {x %% 2 == 0}), 1
 
 ```
 
-Exploring the data
-------------------
+Exploring the data with dplyr
+-----------------------------
 
 
 Making a REST app
