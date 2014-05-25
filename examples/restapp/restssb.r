@@ -1,10 +1,11 @@
 # To run from the REPL:
-# > source("restssb.r")
+# > source("./examples/restapp/restssb.r")
 
 library(Rook)
 library(dplyr)
 library(jsonlite)
 
+# or get from the API?
 ssb_data <- tbl_df(
   read.csv(
     "./data/ssb_immigration_data.csv",
@@ -12,9 +13,9 @@ ssb_data <- tbl_df(
 
 immigration_growth <- function(data) {
   data %>%
-    group_by(Landbakgrunn, Kjonn) %>%
-    mutate(percentage_change = round((Values - lag(Values))/Values*100, 2)) %>%
-    select(Tid, Landbakgrunn, Kjonn, Values, percentage_change)
+    group_by(background, sex) %>%
+    mutate(percentage_change = round((value - lag(value))/value*100, 2)) %>%
+    select(time, background, sex, value, percentage_change)
 }
 
 server <- Rhttpd$new()

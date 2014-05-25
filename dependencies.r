@@ -18,7 +18,8 @@ install.packages(
     "ggplot2",
     "scales",
     "dplyr".
-    "roxygen2"),
+    "roxygen2",
+    "rjson"),
   dep = TRUE)
 
 # viz
@@ -26,3 +27,5 @@ devtools::install_github(
   c("hadley/testthat",
     "rstudio/shiny",
     "rstudio/ggvis"))
+
+devtools::install_githu("rjstat", "ajschumacher")

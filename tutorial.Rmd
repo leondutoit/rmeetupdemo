@@ -5,14 +5,23 @@ output:
   html_document:
     toc: true
     theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
 ---
+
+Setup
+-----
+
+install R, dependencies, rmeetupdemo package
+
 
 Data structures
 ---------------
 
 Before we begin two things:
-* R indexes start from 1 not 0.
-* idiomatic assignment is done with the `<-` operator.
+1. R indexes start from 1 not 0.
+2. idiomatic assignment is done with the `<-` operator.
 
 Core data structures: vector, matrix, list, dataframe.
 
@@ -104,6 +113,8 @@ dat$col
 
 ```
 
+-----
+
 Functional goodies
 ------------------
 
@@ -121,14 +132,78 @@ Reduce(sum, Map(function(x) { x*x }, Filter(Negate(function(x) {x %% 2 == 0}), 1
 
 ```
 
+-----
+
+
 Exploring the data with dplyr
 -----------------------------
+
+[dplyr](https://github.com/hadley/dplyr) is a package specialised for data manipulation in data analysis. It has three main goals (in the words of the authors): 1) make the most important data manipulation verbs easily available in R; 2) performance for in-memory data; and 3) provide the same API for different in-memory and out-of-memomry data stores. Practially speaking, therefore, you could sample your data, figure it out in memory and execute the same code on your Redshift cluster.
+
+
+
+Let's manipulate the SSB immigration data and then talk about what the code is doing.
+
+```{r, eval = FALSE, message = FALSE, warning = FALSE}
+
+library(dplyr)
+library(rmeetupdemo)
+
+
+
+```
+
+-----
 
 
 Making a REST app
 -----------------
 
+Create a file for the app: `$ touch restssb.r`.
+
+```{r, eval = FALSE, message = FALSE, warning = FALSE}
+
+library(Rook)
+library(dplyr)
+library(jsonlite)
+
+ssb_data <- tbl_df(
+  read.csv(
+    "./data/ssb_immigration_data.csv",
+    stringsAsFactors = FALSE))
+
+immigration_growth <- function(data) {
+  data %>%
+    group_by(background, sex) %>%
+    mutate(percentage_change = round((value - lag(value))/value*100, 2)) %>%
+    select(time, background, sex, value, percentage_change)
+}
+
+server <- Rhttpd$new()
+
+server$add(
+  name = "immigration",
+  app = function(env) {
+    request <- Request$new(env)
+    response <- Response$new()
+    growth_data <- immigration_growth(ssb_data)
+    response$write(toJSON(growth_data))
+    response$finish()
+  }
+)
+
+server$start(port = '8004')
+
+
+```
+
+To run this do `> source('./restssb.r')`. A finished example is in `rmeetupdemo/examples/restapp`.
+
+
+-----
+
 
 Making a dashboard
 ------------------
 
+Let's consume the api endpoint we just made and present the data in a graph on a dashboard.
