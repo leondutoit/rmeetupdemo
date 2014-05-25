@@ -24,8 +24,7 @@ set_names <- function(data) {
 
 #' @export
 get_data_from_api <- function(url) {
-  df <- fromJSONstat(readLines(url))[[1]]
-  set_names(df)
+  fromJSONstat(readLines(url))[[1]]
 }
 
 #' @export
@@ -46,7 +45,7 @@ write_csv <- function(data) {
 #' @export
 create_immigration_df <- function() {
   url <- "http://data.ssb.no/api/v0/dataset/48670.json?lang=en"
-  get_data_from_api(url)
+  set_names(get_data_from_api(url))
 }
 
 #' @export
