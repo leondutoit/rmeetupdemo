@@ -28,4 +28,4 @@ devtools::install_github(
     "rstudio/shiny",
     "rstudio/ggvis"))
 
-devtools::install_githu("rjstat", "ajschumacher")
+devtools::install_github("rjstat", "ajschumacher")

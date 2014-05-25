@@ -11,15 +11,27 @@
 # > basic_plot(immigration)
 # > elaborate_plot(remove_zero_values(immigration))
 
-#' @import RCurl
-#' @import httr
 #' @import rjstat
 #' @import ggplot2
 #' @import scales
 
 #' @export
+set_names <- function(data) {
+  names(data) <- c("region", "sex", "background",
+    "time", "contents", "value")
+  data
+}
+
+#' @export
 get_data_from_api <- function(url) {
-  fromJSONstat(readLines(url))
+  df <- fromJSONstat(readLines(url))[[1]]
+  set_names(df)
+}
+
+#' @export
+clean_data <- function(df) {
+  # We see we can remove some values for visual clarity
+  subset(df, subset = !(background %in% c("Stateless", "Uoppgitt")))
 }
 
 #' @export
@@ -38,6 +50,7 @@ create_immigration_df <- function() {
 }
 
 #' @export
+# TODO make work
 basic_plot <- function(df) {
   ggplot(
     df,
@@ -47,6 +60,7 @@ basic_plot <- function(df) {
 }
 
 #' @export
+# TODO make work
 elaborate_plot <- function(df) {
   ggplot(
     df,

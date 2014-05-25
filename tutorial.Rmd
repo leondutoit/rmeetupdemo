@@ -10,10 +10,17 @@ output:
     highlight: zenburn
 ---
 
+
+---------
+
+
 Setup
 -----
 
 install R, dependencies, rmeetupdemo package
+
+
+---------
 
 
 Data structures
@@ -149,9 +156,29 @@ Let's manipulate the SSB immigration data and then talk about what the code is d
 library(dplyr)
 library(rmeetupdemo)
 
+imm_data <- create_immigration_df()
 
+# let's have a look at the data
+basic_plot(imm_data)
+
+# a more in-depth look (remove noise)
+elaborate_plot(clean_data(imm_data))
+
+# let's look at growth rates instead
+# we'll calculate them using dplyr
+# this will show some neat features
+imm_growth <- imm_data %>%
+  group_by(background, sex) %>%
+  mutate(percentage_change = round((value - lag(value))/value*100, 2))
+
+imm_growth %>%
+  select(time, background, sex, value, percentage_change) %>%
+  glimpse()
 
 ```
+
+Now that we have some interesting data about the growth rates of immigration to Norway, let's expose it via a REST API endpoint.
+
 
 -----
 
@@ -159,7 +186,7 @@ library(rmeetupdemo)
 Making a REST app
 -----------------
 
-Create a file for the app: `$ touch restssb.r`.
+Create a file for the app: `$ touch restssb.r`. Fill it with the following code to make a basic REST app.
 
 ```{r, eval = FALSE, message = FALSE, warning = FALSE}
 
@@ -197,7 +224,7 @@ server$start(port = '8004')
 
 ```
 
-To run this do `> source('./restssb.r')`. A finished example is in `rmeetupdemo/examples/restapp`.
+To run this do `> source('./restssb.r')`. A finished example is in `rmeetupdemo/examples/restapp`. Browse to `http://127.0.0.1:8004/custom/immigration` to see the data.
 
 
 -----

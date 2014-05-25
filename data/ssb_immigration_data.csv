@@ -1,4 +1,4 @@
-Persons.by.region..sex..country.background.and.time.region,Persons.by.region..sex..country.background.and.time.sex,Persons.by.region..sex..country.background.and.time.country.background,Persons.by.region..sex..country.background.and.time.time,Persons.by.region..sex..country.background.and.time.contents,Persons.by.region..sex..country.background.and.time.value
+region,sex,background,time,contents,value
 The whole country,Males,Europe except Turkey,1970,Persons,20491
 The whole country,Males,Europe except Turkey,1980,Persons,27628
 The whole country,Males,Europe except Turkey,1986,Persons,34777
