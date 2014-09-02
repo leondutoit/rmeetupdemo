@@ -174,63 +174,42 @@ imm_growth <- imm_data %>%
 imm_growth %>%
   select(time, background, sex, value, percentage_change) %>%
   glimpse()
-
 ```
 
-Now that we have some interesting data about the growth rates of immigration to Norway, let's expose it via a REST API endpoint.
+Now that we have some interesting data about the growth rates of immigration to Norway, let's use the code to display it on a dashboard.
 
 
 -----
 
 
-Making a REST app
------------------
+Make an interactive Rmd document
+--------------------------------
 
-Create a file for the app: `$ touch restssb.r`. Fill it with the following code to make a basic REST app.
+Notes:
+* http://rmarkdown.rstudio.com/authoring_shiny.html
+* http://ggvis.rstudio.com/interactivity.html#shiny-apps
+* https://github.com/yihui/knitr-examples/blob/master/065-rmd-chunk.Rmd
 
-```{r, eval = FALSE, message = FALSE, warning = FALSE}
-
-library(Rook)
-library(dplyr)
-library(jsonlite)
-
-ssb_data <- tbl_df(
-  read.csv(
-    "./data/ssb_immigration_data.csv",
-    stringsAsFactors = FALSE))
-
-immigration_growth <- function(data) {
-  data %>%
-    group_by(background, sex) %>%
-    mutate(percentage_change = round((value - lag(value))/value*100, 2)) %>%
-    select(time, background, sex, value, percentage_change)
-}
-
-server <- Rhttpd$new()
-
-server$add(
-  name = "immigration",
-  app = function(env) {
-    request <- Request$new(env)
-    response <- Response$new()
-    growth_data <- immigration_growth(ssb_data)
-    response$write(toJSON(growth_data))
-    response$finish()
-  }
-)
-
-server$start(port = '8004')
-
-
+```{r setup, echo = FALSE, message = FALSE}
+library(knitr)
+knit_hooks$set(wrapper = function(before, options, envir) {
+  if (before) {
+    sprintf('    ```{r %s}\n', options$params.src)
+  } else '    ```\n'
+})
 ```
 
-To run this do `> source('./restssb.r')`. A finished example is in `rmeetupdemo/examples/restapp`. Browse to `http://127.0.0.1:8004/custom/immigration` to see the data.
+A basic R Markdown code block is constructed like this:
 
+```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE, label = mylabel, wrapper = TRUE}
+# code goes here...
+```
+The `r wrapper = TRUE` option is set to display the code chunk in addition to evaluating it.
 
 -----
 
 
-Making a dashboard
-------------------
+Making a dashboard - deploy the document with Shiny server
+----------------------------------------------------------
 
-Let's consume the api endpoint we just made and present the data in a graph on a dashboard.
+
