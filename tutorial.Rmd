@@ -1,6 +1,6 @@
 
 ---
-title: R meetup - Oslo (June 2014)
+title: R meetup - Oslo (October 2014)
 output:
   html_document:
     toc: true
@@ -51,7 +51,7 @@ str(a_list)
 
 # dateframe (the workhorse tabular data structure)
 # think of it as a list of equal length named vectors
-dat <- data.frame(x = 1:5, y = c('leon', 'charl', 'du', 'toit', 'ble'))
+dat <- data.frame(x = 1:5, y = c('leon', 'charl', 'du', 'toit', 'ble'), stringsAsFactors = FALSE)
 dat
 
 str(dat)
@@ -122,6 +122,16 @@ dat$col
 
 -----
 
+Functions
+---------
+
+```{r, echo = FALSE, eval = FALSE}
+#TODO
+```
+
+-----
+
+
 Functional goodies
 ------------------
 
@@ -176,10 +186,32 @@ imm_growth %>%
   glimpse()
 ```
 
-Now that we have some interesting data about the growth rates of immigration to Norway, let's use the code to display it on a dashboard.
+First we load `dplyr` and `rmeetupdemo` packages. Then we create the immigration data frame. We can use two plotting functions from `rmeetupdemo` to have a look at the data. Then we use the data manipulation capabilities of `dplyr` to add another column to the data frame. We calculate the year-on-year percentage change of immigration grouped by background and sex.
+
+Let's step through the `dplyr` code. First though, a pause on the `%>%` operator is in order. In R one can define arbitrary operators by placing any character or set of characters between two `%` signs. We could, therefore, make our own multiply operator as such: ``` `%mult%` <- function(a, b) { a * b } ``` and use it in the familiar infix way as such: `4 %mult% 4`. 
+
+The `%>%` operator was defined in this way by the author of the [magrittr](https://github.com/smbache/magrittr) package. It is similar to F#'s pipe-forward operator `|>`, or Clojure's threading macro `->>`. In general it allows you to write ` g(f(x, y), z)` as `x %>% f(y) %>% g(z)`. In our example above the following statements are therefore equivalent:
+
+```{r, eval = FALSE, label = magrittr_example}
+# without the pipe
+mutate(group_by(df, background, sex), percentage_change = round((value - lag(value))/value*100, 2))
+
+# with the pipe
+df %>% group_by(background, sex) %>% mutate(percentage_change = round((value - lag(value))/value*100, 2))
+```
+
+The motivation is that it makes code more readable. By avoiding deep nesting it can help promote clear code especially in the context of data manipulation. Stepping through the `dplyr` code is easy now. First we group the data according to `backgroun` and `sex`, and then we calculate the percentage change per group. The call to `mutate` means that we want to change the data frame by adding another column.
 
 
 -----
+
+Visualise the growth rate with ggvis
+------------------------------------
+
+
+
+-----
+
 
 
 Make an interactive Rmd document
@@ -189,6 +221,7 @@ Notes:
 * http://rmarkdown.rstudio.com/authoring_shiny.html
 * http://ggvis.rstudio.com/interactivity.html#shiny-apps
 * https://github.com/yihui/knitr-examples/blob/master/065-rmd-chunk.Rmd
+* https://github.com/rstudio/ggvis/tree/master/demo/rmarkdown
 
 ```{r setup, echo = FALSE, message = FALSE}
 library(knitr)
@@ -211,5 +244,75 @@ The `r wrapper = TRUE` option is set to display the code chunk in addition to ev
 
 Making a dashboard - deploy the document with Shiny server
 ----------------------------------------------------------
+
+We will use the [Rstudio IDE](http://www.rstudio.com/products/RStudio/) to run this locally - [download](http://www.rstudio.com/products/rstudio/download/).
+
+
+-----
+
+Use devtools and roxygen2 to package our code
+---------------------------------------------
+
+[devtools](https://github.com/hadley/devtools) is a package for package development. You don't need to use it but it makes life easier.
+
+In the interactive R session, navigate to a place in your directory tree outside of the rmeetupdemo package - somewhere where you can initialize a new git repo. 
+
+```{r, eval = FALSE, label = create_new_package}
+setwd("~/") # or whatever path you prefer
+library(devtools)
+create("my_new_package")
+```
+
+Now create a file in the `R` directory named `immigration_manip.R`. This will hold our package code. Put this into the file:
+
+```{r, eval = FALSE, label = R_package_code}
+
+#' @import dplyr
+
+#' @export
+add_growth_rates <- function(df) {
+  df %>%
+    group_by(background, sex) %>%
+    mutate(percentage_change = round((value - lag(value))/value*100, 2))
+}
+
+```
+Let's step through the few lines of code from top to bottom. In this file we use annotated comments to produce documentation and to generate the necessary code in the `DESCRIPTION` file - this will hangle the dependency on `dplyr`, by making sure it will be loaded when we load our own package. Using this style of commenting we say that we want to import `dplyr` when loading this code. We also annotate the function to add grwoth rates to the data with `#' @export`. Here we are saying that we want this function to be available to package users. It is equivalent to declaring a class method public. We then define the function.
+
+Now let's build documentation and install this package into R locally:
+
+```{r, eval = FALSE, label = R_package_install}
+library(roxygen2)
+roxygenise("mypackage") # use your package name
+install("mypackage")
+```
+
+Check the contents of the DESCRIPTION file - you should see and instruction to export the function. Next we can use the package with the `rmeetupdemo` package.
+
+```{r, eval = FALSE, label = R_package_use}
+library(rmeetupdemo)
+library(mypackage)
+df <- clean_data(create_immigration_df())
+add_growth_rates(df)
+```
+
+We can now refactor the dashboard to use our package. This is, in my experience, a good design pattern: keep data manipulation code in one place, and the interactive visualization elsewhere.
+
+```{r, eval = FALSE, label = R_package_refactor_dashboard}
+#TODO
+```
+
+-----
+
+Recommended further reading
+---------------------------
+
+
+
+
+
+
+
+
 
 
