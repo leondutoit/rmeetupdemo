@@ -10,8 +10,6 @@ install.packages("Rcpp", type = "source")
 install.packages(
   c("codetools",
     "devtools",
-    "DBI",
-    "RPostgreSQL",
     "RCurl",
     "httr",
     "jsonlite",
@@ -20,12 +18,12 @@ install.packages(
     "dplyr".
     "roxygen2",
     "rjson"),
+  type = "source",
   dep = TRUE)
 
 # viz
 devtools::install_github(
   c("hadley/testthat",
     "rstudio/shiny",
-    "rstudio/ggvis"))
-
-devtools::install_github("rjstat", "ajschumacher")
+    "rstudio/ggvis",
+    "ajschumacher/rjstat"))
