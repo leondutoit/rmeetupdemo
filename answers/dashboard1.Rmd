@@ -1,0 +1,52 @@
+---
+title: "Immigration to Norway"
+output: html_document
+runtime: shiny
+---
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, label = data}
+
+library(rmeetupdemo)
+library(dplyr)
+
+imm_data <- create_immigration_df()
+
+imm_growth <- clean_data(imm_data) %>%
+  group_by(background, sex) %>%
+  mutate(percentage_change = round((value - lag(value))/value*100, 2))
+
+```
+
+Immigration to Norway by country - absolute values since 1970
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, label = viz1}
+
+library(ggvis)
+
+imm_growth %>% 
+  ggvis(~background, ~value) %>% 
+  layer_boxplots()
+
+```
+
+Growth rates of immigration to Norway by background
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, label = viz2}
+
+imm_growth %>% 
+  ggvis(~time, ~percentage_change, fill = ~factor(background)) %>% 
+  layer_points()
+
+```
+
+The distribution of yearly immigration quantities
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE, label = viz3}
+
+imm_growth[complete.cases(imm_growth$percentage_change),] %>%
+  group_by(time) %>%
+  summarise(total_immigration = sum(value)) %>%
+  ggvis(~total_immigration) %>%
+  layer_densities(adjust = input_slider(.1, 2, value = 1, step = .1, label = "Bandwidth adjustment"))
+
+```

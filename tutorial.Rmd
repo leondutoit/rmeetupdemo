@@ -17,7 +17,12 @@ output:
 Setup
 -----
 
-install R, dependencies, rmeetupdemo package
+install R 
+install dependencies
+make directory called `rworkshop` - we will do all out work in it
+clone rmeetupdemo package
+start R repl
+install rmeetupdemo
 
 
 ---------
@@ -33,6 +38,7 @@ Before we begin two things:
 Core data structures: vector, matrix, list, dataframe.
 
 ```{r, message = FALSE, warning = FALSE}
+
 # vector (homogenous)
 vec <- c(1, 2, 3)
 vec
@@ -125,29 +131,58 @@ dat$col
 Functions
 ---------
 
-```{r, echo = FALSE, eval = FALSE}
-#TODO
-```
-
------
-
-
-Functional goodies
-------------------
-
 ```{r, message = FALSE, warning = FALSE}
 
-#vectorised
-unlist(Map(function(x) { 10 * x }, 1:10))
+# simple example
+my_func <- function() {
+  print("Hello there")
+}
+my_func()
 
-#lambdas
-#first class functions
+# multiply numbers
+mult <- function(a, b) {
+  a * b
+}
+mult(3, 3)
 
-Reduce(sum, Map(function(x) { x*x }, Filter(Negate(function(x) {x %% 2 == 0}), 1:100)))
+# keyword args
+mult2 <- function(a, b = 2) {
+  a * b
+}
+mult2(3)
 
-#iffys
+# variable args
+mult_all <- function(...) {
+  Reduce(mult, c(...))
+}
+mult_all(1, 2, 3, 4, 5)
+
+# lambdas / anonymous functions
+mult_all2 <- function(...) {
+  Reduce(function(a, b) { a * b }, c(...))
+}
+mult_all2(1, 2, 3, 4, 5)
+
+# Iffys - immediately invoked function expressions
+(function() {
+  d <- data.frame(x = 1:10)
+  subset(d, d$x < 5)
+})()
+
+my_cleaner <- function(vector) {
+  # vector cleaner
+  vector[!is.na(vector)]
+}
+
+# first class functions
+clean <- function(data, clean_func = my_cleaner) {
+  clean_func(data)
+}
+clean(c(NA, 4, 5, 6))
 
 ```
+
+These are the basics of functions in R. It is possible to do OO-style programming in R (there is more than one system to do so with) but I have not yet needed it.
 
 -----
 
@@ -208,7 +243,29 @@ The motivation is that it makes code more readable. By avoiding deep nesting it 
 Visualise the growth rate with ggvis
 ------------------------------------
 
+[ggvis](https://github.com/rstudio/ggvis) is an evolution of [ggplot2](http://ggplot2.org/) designed for the web. It is an attempt to implement an interactive grammar of graphics. The [grammar of graphics]() is a concept developed by Leland Wilkinson - in his book, [The Grammar of Graphics](http://www.springer.com/statistics/computational+statistics/book/978-0-387-24544-7), he outlines this grammar defining it roughly as a grammar to describe what your statistical graphic should look like. In this sense it is supposed to be declarative: you say what you want to see and the system figures out the details for you. His implementation was for SPSS but `ggplot2` implemented this in R.
 
+`ggvis` is still in its infancy and lacks many features but is already good enough for simple visualisation use cases.
+
+```{r, eval = FALSE, message = FALSE, warning = FALSE}
+
+library(ggvis)
+
+imm_growth %>% 
+  ggvis(~background, ~value) %>% 
+  layer_boxplots()
+
+imm_growth %>% 
+  ggvis(~time, ~percentage_change, fill = ~factor(background)) %>% 
+  layer_points()
+
+imm_growth[complete.cases(imm_growth$percentage_change),] %>%
+  group_by(time) %>%
+  summarise(total_immigration = sum(value)) %>%
+  ggvis(~total_immigration) %>%
+  layer_densities(adjust = input_slider(.1, 2, value = 1, step = .1, label = "Bandwidth adjustment"))
+
+```
 
 -----
 
@@ -216,12 +273,6 @@ Visualise the growth rate with ggvis
 
 Make an interactive Rmd document
 --------------------------------
-
-Notes:
-* http://rmarkdown.rstudio.com/authoring_shiny.html
-* http://ggvis.rstudio.com/interactivity.html#shiny-apps
-* https://github.com/yihui/knitr-examples/blob/master/065-rmd-chunk.Rmd
-* https://github.com/rstudio/ggvis/tree/master/demo/rmarkdown
 
 ```{r setup, echo = FALSE, message = FALSE}
 library(knitr)
@@ -237,15 +288,12 @@ A basic R Markdown code block is constructed like this:
 ```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE, label = mylabel, wrapper = TRUE}
 # code goes here...
 ```
-The `r wrapper = TRUE` option is set to display the code chunk in addition to evaluating it.
 
------
+The `r wrapper = TRUE` option is set to display the code chunk in addition to evaluating it. To make our interactive dashboard we will combine what we have seen so far into one `Rmd` file. Have a look at the file in `rmeetupdemo/answers/dashboard1.Rmd`. Rewrite that into your own file.
 
+We will use the [Rstudio IDE](http://www.rstudio.com/products/RStudio/) to run this locally - [download](http://www.rstudio.com/products/rstudio/download/). 
 
-Making a dashboard - deploy the document with Shiny server
-----------------------------------------------------------
-
-We will use the [Rstudio IDE](http://www.rstudio.com/products/RStudio/) to run this locally - [download](http://www.rstudio.com/products/rstudio/download/).
+For production deployments one would use shiny server - an R websocket server. For more information you can have a look at the shiny-server [repo](https://github.com/rstudio/shiny-server) and its [documentation](http://www.rstudio.com/products/shiny/shiny-server/).
 
 
 -----
@@ -296,18 +344,49 @@ df <- clean_data(create_immigration_df())
 add_growth_rates(df)
 ```
 
-We can now refactor the dashboard to use our package. This is, in my experience, a good design pattern: keep data manipulation code in one place, and the interactive visualization elsewhere.
+We should of course also test our function. To do that we will use the [testthat](https://github.com/hadley/testthat) package. First create the test directory in your package: `$ mkdir tests`. Now create a file called `test-growth.R`. Put this into the file:
 
-```{r, eval = FALSE, label = R_package_refactor_dashboard}
-#TODO
+```{r, eval = FALSE, label = R_package_testing}
+library(testthat)
+
+context("Growth calculations")
+
+test_that("add_growth_rates calculates yearly growth correctly", {
+  testdf <- data.frame(
+    background = c("a", "a", "b", "b", "b", "b"),
+    sex = c("male", "male", "female", "female", "male", "male"),
+    value = c(10, 12, 5, 6, 3, 4),
+    stringsAsFactors = FALSE)
+  outdf <- add_growth_rates(testdf)
+  correctdf <- data.frame(
+    background = c("a", "a", "b", "b", "b", "b"),
+    sex = c("male", "male", "female", "female", "male", "male"),
+    value = c(10, 12, 5, 6, 3, 4),
+    percentage_change = c(NA, 16.67, NA, 16.67, NA, 25.00),
+    stringsAsFactors = FALSE)
+  expect_equivalent(outdf, correctdf)
+  # no numeric tolerance with identical expectations
+  expect_identical(outdf$background, correctdf$background) 
+  expect_identical(outdf$sex, correctdf$sex)
+  expect_identical(outdf$value, correctdf$value)
+  expect_identical(outdf$percentage_change, correctdf$percentage_change)
+})
+
 ```
+
+We can now refactor the dashboard to use our package. This is, in my experience, a good design pattern: keep data manipulation code in one place, and the interactive visualization elsewhere. The refatored dashboard is in `rmeetupdemo/answers/dashboard2.Rmd`.
+
 
 -----
 
 Recommended further reading
 ---------------------------
 
-
+Notes:
+* http://rmarkdown.rstudio.com/authoring_shiny.html
+* http://ggvis.rstudio.com/interactivity.html#shiny-apps
+* https://github.com/yihui/knitr-examples/blob/master/065-rmd-chunk.Rmd
+* https://github.com/rstudio/ggvis/tree/master/demo/rmarkdown
 
 
 
