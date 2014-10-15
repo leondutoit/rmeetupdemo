@@ -1,6 +1,6 @@
 
 ---
-title: R meetup - Oslo (October 2014)
+title: R meetup - Oslo
 output:
   html_document:
     toc: true
@@ -17,23 +17,43 @@ output:
 Setup
 -----
 
-install R 
-install dependencies
-make directory called `rworkshop` - we will do all out work in it
-clone rmeetupdemo package
-start R repl
-install rmeetupdemo
+* [download](http://cran.uib.no/) and install R 
+* make a workshop directory `$ mkdir rworkshop && cd rworkshop`
+* clone workshop package `$ git clone git@github.com:leondutoit/rmeetupdemo.git`
+* install dependencies `$ cd rmeetupdemo && chmod 755 ./rmeetupdemo/dependencies.R && sudo ./dependencies.R && cd ..`
+* start R repl (use either Rconsole, Rstudio if you already do, or terminal) - if you use terminal just type `$ R`
+* install rmeetupdemo `devtools::install('rmeetupdemo')`
+
+Let me know if you have any issues :)
+
+---------
+
+A bit of R history and context
+------------------------------
+
+R is a GNU open source continuation of the S language and environment developed at Bell Laboratories (formerly AT&T) by Rick Becker, John
+Chambers and Allan Wilks. From the very beginning it was designed with interactive data oriented work in mind.
+
+It was then reimplemented as "R" by Ross Ihaka and Robert Gentleman at the Department of Statistics, University of Aukland, New Zealand. R 1.0.0 was released on 29 February 2000 and 2.0.0 on 4 October 2004.
+R 3.0.0 came out on 3 April 2013.
+
+GNU R's implementation consists of 40% C, 36% R, 23 % FORTRAN another 1%. You can browse the code on [this](https://github.com/wch/r-source) github read-only mirror or check it out from [svn](https://svn.r-project.org/R/).
+
+To describe R as a programming language I am going to begin with this quote from [the README](https://github.com/wch/r-source/blob/trunk/README): "The core of R is an interpreted computer language with a syntax superficially similar to C, but which is actually a "functional programming language" with capabilities similar to Scheme." My guess, and this is only my guess, is that the functional programming language is in inverted commas because of mutable state.
+
+R is an excellent language for practical data science - data manipulation, modelling and visualization. It allows you to address a wide variety of common and important use cases with little programming effort. Other reasons are: It is not difficult to run code in production or produce production quality code; the community is vibrant; there is plenty of innovation in package development; there is a low barrier to interoperability with other languages (e.g. C, C++, Java); documentation, examples and help is easy to find and getting started takes little effort. 
 
 
 ---------
 
 
+
 Data structures
 ---------------
 
-Before we begin two things:
-1. R indexes start from 1 not 0.
-2. idiomatic assignment is done with the `<-` operator.
+Before we begin note two important things:
+* R indexes start from 1 not 0.
+* idiomatic assignment is done with the `<-` operator.
 
 Core data structures: vector, matrix, list, dataframe.
 
@@ -374,7 +394,7 @@ test_that("add_growth_rates calculates yearly growth correctly", {
 
 ```
 
-We can now refactor the dashboard to use our package. This is, in my experience, a good design pattern: keep data manipulation code in one place, and the interactive visualization elsewhere. The refatored dashboard is in `rmeetupdemo/answers/dashboard2.Rmd`.
+We can now refactor the dashboard to use our package. This is, in my experience, a good design pattern: keep data manipulation code in one place, and the interactive visualization elsewhere. The refactored dashboard is in `rmeetupdemo/answers/dashboard2.Rmd`.
 
 
 -----
