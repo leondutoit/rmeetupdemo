@@ -434,7 +434,7 @@ The possible reading list is vast but I will try to give some pointers to things
 
 Performance
 
-* [data.table](https://github.com/Rdatatable/data.table) - for highly performant in-memory tabular data manipulation and file reading; this package is very well tested, has excellent documentation is is under active development; it is a go-to if memory footprint and speed are real concerns
+* [data.table](https://github.com/Rdatatable/data.table) - for highly performant in-memory tabular data manipulation and file reading; this package is very well tested, has excellent documentation and is under active development; it is a go-to if memory footprint and speed are real concerns
 * [Rcpp](https://github.com/RcppCore/Rcpp/) - established package for R and C++ interop
 * [Rcpp11](https://github.com/Rcpp11/Rcpp11) - R and C++ for the C++11 standard
 * [RcppParallel](https://github.com/RcppCore/RcppParallel) - parallel programming with Rcpp
@@ -473,6 +473,7 @@ Books
 * [Advanced R](http://adv-r.had.co.nz/) - _the_ book for learning R programming
 * [R Packages](http://r-pkgs.had.co.nz/) - learn how to write R packages
 * [ggplot2: Elegant Graphics for Data Analysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) - a good introduction to the ideas behind the grammar of graphics as implemented in R; a bit old now but still a very good read
+* [Seamless R and C++ Integration](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-6867-7) - RCpp
 
 Interesting projects
 
