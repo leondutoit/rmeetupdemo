@@ -13,6 +13,17 @@ output:
 
 ---------
 
+About me
+--------
+
+My name is Leon du Toit and I'm from South Africa.
+I tweet under [lcdutoit](https://twitter.com/lcdutoit), [blog](http://www.leonomics.com/) about technology, economics and the world.
+Work-wise I really enjoy making sense of data with open source tools.
+
+
+
+--------------
+
 
 Setup
 -----
@@ -416,16 +427,55 @@ We can now refactor the dashboard to use our package. This is, in my experience,
 Recommended further reading
 ---------------------------
 
-Notes:
-* http://rmarkdown.rstudio.com/authoring_shiny.html
-* http://ggvis.rstudio.com/interactivity.html#shiny-apps
-* https://github.com/yihui/knitr-examples/blob/master/065-rmd-chunk.Rmd
-* https://github.com/rstudio/ggvis/tree/master/demo/rmarkdown
+The possible reading list is vast but I will try to give some pointers to things I consider both important and interesting. 
 
+* I actively work on [a data science wiki](https://github.com/leondutoit/data-centric-programming/wiki) where I show how to do practical work with R and keep a log of interesting articles and books
+* [Rstudio](http://www.rstudio.com/) - a leading company that produces a high quality R IDE and many excellent open source R packages
 
+Performance
 
+* [data.table](https://github.com/Rdatatable/data.table) - for highly performant in-memory tabular data manipulation and file reading; this package is very well tested, has excellent documentation is is under active development; it is a go-to if memory footprint and speed are real concerns
+* [Rcpp](https://github.com/RcppCore/Rcpp/) - established package for R and C++ interop
+* [Rcpp11](https://github.com/Rcpp11/Rcpp11) - R and C++ for the C++11 standard
+* [RcppParallel](https://github.com/RcppCore/RcppParallel) - parallel programming with Rcpp
+* [RcppEigen](https://github.com/RcppCore/RcppEigen) - Rcpp integration for the Eigen templated linear algebra library
+* [RcppArmadillo](https://github.com/RcppCore/RcppArmadillo) - Rcpp integration for Armadillo templated linear algebra library
+* [Rllvm](https://github.com/duncantl/Rllvm) - R interface to LLVM C++ API
+* [pqr](https://github.com/radfordneal/pqR) - a fork of the GNU R interpreter with innovations for speed and memory efficiency
 
+Databases
 
+* [DBI](https://github.com/rstats-db/DBI) - A database interface (DBI) definition for communication between R and RDBMSs; DB specific packages build on this
+* [RPostgreSQL](http://cran.r-project.org/web/packages/RPostgreSQL/index.html) - for PostgreSQL
+* [RSQlite](https://github.com/rstats-db/RSQLite) - for sqlite
+* [RMySQL](http://cran.r-project.org/web/packages/RMySQL/index.html) - for mysql
 
+Other good packages 
 
+* [ggplot2](https://github.com/hadley/ggplot2) - A grammar of graphics for R
+* [shiny](https://github.com/rstudio/shiny) - Easy interactive web applications with R
+* [rCharts](https://github.com/ramnathv/rCharts/) - Interactive JS Charts from R
+* [pryr](https://github.com/hadley/pryr) - inspect R internals interactively
+* [evaluate](https://github.com/hadley/evaluate) - A version of eval for R that returns more information about what happened
+* [memoise](https://github.com/hadley/memoise) - memoisation
+* [lazyeval](https://github.com/hadley/lazyeval) - lazy evaluation
+* [caret](https://github.com/topepo/caret) - predictive modeling
+* [knitr](https://github.com/yihui/knitr) - A general-purpose tool for dynamic report generation in R
+* [tidyr](https://github.com/hadley/tidyr) - Easily tidy data
+* [rlogging](https://github.com/mjkallen/rlogging) - simple logging
+* [httr](https://github.com/hadley/httr) - easy HTTP
+* [RCurl](http://cran.r-project.org/web/packages/RCurl/index.html) - curl from R (low-level)
+* [jsonlite](https://github.com/jeroenooms/jsonlite) - A Robust, High Performance JSON Parser and Generator for R
+* [opencpu](https://github.com/jeroenooms/opencpu) - OpenCPU system for embedded scientific computation and reproducible research (or a way to expose your R package through HTTP)
 
+Books
+
+* [Advanced R](http://adv-r.had.co.nz/) - _the_ book for learning R programming
+* [R Packages](http://r-pkgs.had.co.nz/) - learn how to write R packages
+* [ggplot2: Elegant Graphics for Data Analysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) - a good introduction to the ideas behind the grammar of graphics as implemented in R; a bit old now but still a very good read
+
+Interesting projects
+
+* [ropensci](http://ropensci.org/) - access to open scientific data from R
+* [revolutionR](http://www.revolutionanalytics.com/) - enterprise version of R 
+* [renjin](http://www.renjin.org/) - R on the JVM
