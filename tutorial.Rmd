@@ -210,11 +210,11 @@ These are the basics of functions in R. It is possible to do OO-style programmin
 Exploring the data with dplyr
 -----------------------------
 
-[dplyr](https://github.com/hadley/dplyr) is a package specialised for data manipulation in data analysis. It has three main goals (in the words of the authors): 1) make the most important data manipulation verbs easily available in R; 2) performance for in-memory data; and 3) provide the same API for different in-memory and out-of-memomry data stores. Practially speaking, therefore, you could sample your data, figure it out in memory and execute the same code on your Redshift cluster.
+[dplyr](https://github.com/hadley/dplyr) is a package specialised for data manipulation in data analysis. It has three main goals (in the words of the authors): 1) make the most important data manipulation verbs easily available in R; 2) performance for in-memory data; and 3) provide the same API for different in-memory and out-of-memomry data stores. Practially speaking, therefore, you could sample your data, figure it out in memory and execute the same code on your distributed cluster.
 
 
 
-Let's manipulate the SSB immigration data and then talk about what the code is doing.
+Let's manipulate immigration data from the Statistisk sentralbyrå and then talk about what the code is doing.
 
 ```{r, eval = FALSE, message = FALSE, warning = FALSE}
 
@@ -241,7 +241,7 @@ imm_growth %>%
   glimpse()
 ```
 
-First we load `dplyr` and `rmeetupdemo` packages. Then we create the immigration data frame. We can use two plotting functions from `rmeetupdemo` to have a look at the data. Then we use the data manipulation capabilities of `dplyr` to add another column to the data frame. We calculate the year-on-year percentage change of immigration grouped by background and sex.
+First we load `dplyr` and `rmeetupdemo` packages. Then we create the immigration data frame using a function from the `rmeetupdemo` package. We can use two plotting functions from `rmeetupdemo` to have a look at the data. In the second plot we use another function from the `rmeetupdemo` package to remove noise from the data. Then we use the data manipulation capabilities of `dplyr` to add another column to the data frame. We calculate the year-on-year percentage change of immigration grouped by background and sex. We assign this modified data.frame to another variable (R and dplyr are clever enough not to copy data in this case).
 
 Let's step through the `dplyr` code. First though, a pause on the `%>%` operator is in order. In R one can define arbitrary operators by placing any character or set of characters between two `%` signs. We could, therefore, make our own multiply operator as such: ``` `%mult%` <- function(a, b) { a * b } ``` and use it in the familiar infix way as such: `4 %mult% 4`. 
 
@@ -255,7 +255,7 @@ mutate(group_by(df, background, sex), percentage_change = round((value - lag(val
 df %>% group_by(background, sex) %>% mutate(percentage_change = round((value - lag(value))/value*100, 2))
 ```
 
-The motivation is that it makes code more readable. By avoiding deep nesting it can help promote clear code especially in the context of data manipulation. Stepping through the `dplyr` code is easy now. First we group the data according to `backgroun` and `sex`, and then we calculate the percentage change per group. The call to `mutate` means that we want to change the data frame by adding another column.
+The motivation is that it makes code more readable. By avoiding deep nesting it can help promote clear code especially in the context of data manipulation. Stepping through the `dplyr` code is easy now. First we group the data according to `background` and `sex`, and then we calculate the percentage change per group. The call to `mutate` means that we want to change the data frame by adding another column.
 
 
 -----
@@ -263,7 +263,7 @@ The motivation is that it makes code more readable. By avoiding deep nesting it 
 Visualise the growth rate with ggvis
 ------------------------------------
 
-[ggvis](https://github.com/rstudio/ggvis) is an evolution of [ggplot2](http://ggplot2.org/) designed for the web. It is an attempt to implement an interactive grammar of graphics. The [grammar of graphics]() is a concept developed by Leland Wilkinson - in his book, [The Grammar of Graphics](http://www.springer.com/statistics/computational+statistics/book/978-0-387-24544-7), he outlines this grammar defining it roughly as a grammar to describe what your statistical graphic should look like. In this sense it is supposed to be declarative: you say what you want to see and the system figures out the details for you. His implementation was for SPSS but `ggplot2` implemented this in R.
+[ggvis](https://github.com/rstudio/ggvis) is an evolution of [ggplot2](http://ggplot2.org/) designed for the web. It is an attempt to implement an interactive grammar of graphics. The [grammar of graphics]() is a concept developed by Leland Wilkinson in his book, [The Grammar of Graphics](http://www.springer.com/statistics/computational+statistics/book/978-0-387-24544-7). In the book he outlines this grammar as a way to describe what your statistical graphic should look like. In this sense it is supposed to be declarative: you say what you want to see and the system figures out the details for you. His implementation was for SPSS but `ggplot2` implemented this in R.
 
 `ggvis` is still in its infancy and lacks many features but is already good enough for simple visualisation use cases.
 
@@ -303,32 +303,33 @@ knit_hooks$set(wrapper = function(before, options, envir) {
 })
 ```
 
-A basic R Markdown code block is constructed like this:
+We can now use what we have learnt in combination with RMarkdown to create a dashboard. A basic RMarkdown code block is constructed like this:
 
 ```{r, eval = FALSE, echo = TRUE, message = FALSE, warning = FALSE, label = mylabel, wrapper = TRUE}
 # code goes here...
 ```
 
-The `r wrapper = TRUE` option is set to display the code chunk in addition to evaluating it. To make our interactive dashboard we will combine what we have seen so far into one `Rmd` file. Have a look at the file in `rmeetupdemo/answers/dashboard1.Rmd`. Rewrite that into your own file.
+The `r wrapper = TRUE` option is set to display the code chunk in addition to evaluating it. To make our interactive dashboard we will combine what we have seen so far into one `Rmd` file. 
 
-We will use the [Rstudio IDE](http://www.rstudio.com/products/RStudio/) to run this locally - [download](http://www.rstudio.com/products/rstudio/download/). 
+The code to produce the dashboard is contained in the file in `rmeetupdemo/answers/dashboard1.Rmd`. Rewrite that into your own file.
+
+We will use the [Rstudio IDE](http://www.rstudio.com/products/RStudio/) to run this locally - [download](http://www.rstudio.com/products/rstudio/download/) it; open the IDE, browse to the `dashboard1.Rmd` file and click `run document`. This will serve the `Rmd` file with shiny-server from the IDE. It can also be viewed in the browser.
 
 For production deployments one would use shiny server - an R websocket server. For more information you can have a look at the shiny-server [repo](https://github.com/rstudio/shiny-server) and its [documentation](http://www.rstudio.com/products/shiny/shiny-server/).
 
 
 -----
 
-Use devtools and roxygen2 to package our code
----------------------------------------------
+Use devtools and roxygen2 to package our code (extra)
+-----------------------------------------------------
 
-[devtools](https://github.com/hadley/devtools) is a package for package development. You don't need to use it but it makes life easier.
+[devtools](https://github.com/hadley/devtools) is a package for package development. I consider it best practice to use it for development, even though it is not stictly necessary. To see the intended outcome of this section you can look in `rmeetupdemo/answers/rworkshop_package`.
 
-In the interactive R session, navigate to a place in your directory tree outside of the rmeetupdemo package - somewhere where you can initialize a new git repo. 
+In the interactive R session, in the `rworkshop` directory do the following: 
 
 ```{r, eval = FALSE, label = create_new_package}
-setwd("~/") # or whatever path you prefer
 library(devtools)
-create("my_new_package")
+create("rworkshop_package")
 ```
 
 Now create a file in the `R` directory named `immigration_manip.R`. This will hold our package code. Put this into the file:
@@ -345,26 +346,26 @@ add_growth_rates <- function(df) {
 }
 
 ```
-Let's step through the few lines of code from top to bottom. In this file we use annotated comments to produce documentation and to generate the necessary code in the `DESCRIPTION` file - this will hangle the dependency on `dplyr`, by making sure it will be loaded when we load our own package. Using this style of commenting we say that we want to import `dplyr` when loading this code. We also annotate the function to add grwoth rates to the data with `#' @export`. Here we are saying that we want this function to be available to package users. It is equivalent to declaring a class method public. We then define the function.
+Let's step through the few lines of code from top to bottom. In this file we use annotated comments to produce documentation and to generate the necessary code in the `NAMESPACE` file - this will handle the dependency on `dplyr`, by making sure it will be loaded when we load our own package. Using this style of commenting we say that we want to import `dplyr` when loading this code. We also annotate the function `add_growth_rates` to the data with `#' @export`. Here we are saying that we want this function to be available to package users. It is equivalent to declaring a class method public. We then define the function.
 
 Now let's build documentation and install this package into R locally:
 
 ```{r, eval = FALSE, label = R_package_install}
 library(roxygen2)
-roxygenise("mypackage") # use your package name
-install("mypackage")
+roxygenise("rworkshop_package") # use your package name
+install("rworkshop_package")
 ```
 
-Check the contents of the DESCRIPTION file - you should see and instruction to export the function. Next we can use the package with the `rmeetupdemo` package.
+Check the contents of the `NAMESPACE` file - you should see and instruction to export the function. Next we can use the package with the `rmeetupdemo` package.
 
 ```{r, eval = FALSE, label = R_package_use}
 library(rmeetupdemo)
-library(mypackage)
+library(rworkshop_package)
 df <- clean_data(create_immigration_df())
 add_growth_rates(df)
 ```
 
-We should of course also test our function. To do that we will use the [testthat](https://github.com/hadley/testthat) package. First create the test directory in your package: `$ mkdir tests`. Now create a file called `test-growth.R`. Put this into the file:
+We should of course also test our function. To do that we will use the [testthat](https://github.com/hadley/testthat) package. First create the test directory in your package: `$ mkdir tests`. Now create a file called `test_growth.R`. Put this into the file:
 
 ```{r, eval = FALSE, label = R_package_testing}
 library(testthat)
@@ -392,6 +393,19 @@ test_that("add_growth_rates calculates yearly growth correctly", {
   expect_identical(outdf$percentage_change, correctdf$percentage_change)
 })
 
+```
+
+Lastly, for the package to be valid, we need to replace the values in the `DESCRIPTION` file with the relavant information:
+
+```{r, eval = FALSE, label = DESCRIPTION_file}
+Package: rworkshop_package
+Title: What the package does (short line)
+Version: 0.1
+Authors@R: "First Last <first.last@example.com> [aut, cre]"
+Description: What the package does (paragraph)
+Depends: R (>= 3.1.0)
+License: What license is it under?
+LazyData: true
 ```
 
 We can now refactor the dashboard to use our package. This is, in my experience, a good design pattern: keep data manipulation code in one place, and the interactive visualization elsewhere. The refactored dashboard is in `rmeetupdemo/answers/dashboard2.Rmd`.
