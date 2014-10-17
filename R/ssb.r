@@ -49,7 +49,6 @@ create_immigration_df <- function() {
 }
 
 #' @export
-# TODO make work
 basic_plot <- function(df) {
   ggplot(
     df,
@@ -59,7 +58,6 @@ basic_plot <- function(df) {
 }
 
 #' @export
-# TODO make work
 elaborate_plot <- function(df) {
   ggplot(
     df,
