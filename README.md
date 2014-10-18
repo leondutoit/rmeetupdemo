@@ -10,7 +10,7 @@ Get to know R; make a small data analysis library with [dplyr](https://github.co
 * make a workshop directory `$ mkdir rworkshop && cd rworkshop`
 * clone workshop package `$ git clone git@github.com:leondutoit/rmeetupdemo.git` into this directory
 * you should have a directory structure like this `rworkshop/rmeetupdemo`
-* install dependencies `$ cd rmeetupdemo && chmod 755 ./rmeetupdemo/dependencies.R && sudo ./dependencies.R && cd ..`
+* install dependencies `$ cd rmeetupdemo && chmod 755 ./dependencies.R && sudo ./dependencies.R && cd ..`
 * start R repl (use either Rconsole, Rstudio if you already do, or terminal) - if you use terminal just type `$ R`
 * install rmeetupdemo `devtools::install('rmeetupdemo')`
 * lastly, for serving the dashboard, [download](http://www.rstudio.com/products/RStudio/) and install Rstudio IDE
