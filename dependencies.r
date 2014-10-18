@@ -17,7 +17,8 @@ install.packages(
     "scales",
     "dplyr",
     "roxygen2",
-    "rjson"),
+    "rjson",
+    "magrittr"),
   type = "source",
   dep = TRUE)
 

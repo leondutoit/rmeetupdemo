@@ -13,3 +13,7 @@ Get to know R; make a small data analysis library with [dplyr](https://github.co
 * install dependencies `$ cd rmeetupdemo && chmod 755 ./dependencies.R && sudo ./dependencies.R && cd ..`
 * install rmeetupdemo: `$ R -e "devtools::install('rmeetupdemo')"`
 * lastly, for serving the dashboard, [download](http://www.rstudio.com/products/RStudio/) and install Rstudio IDE
+
+### Testing your setup
+
+You should be able to run this from the command line without failure: `$ R -e "library(dplyr); library(rmeetupdemo); library(ggvis); d <- create_immigration_df()"`. Warnings are OK.
