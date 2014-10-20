@@ -89,7 +89,7 @@ a_list
 
 str(a_list)
 
-# dateframe (the workhorse tabular data structure)
+# data frame (the workhorse tabular data structure)
 # think of it as a list of equal length named vectors
 dat <- data.frame(x = 1:5, y = c('leon', 'charl', 'du', 'toit', 'ble'), stringsAsFactors = FALSE)
 dat
