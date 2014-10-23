@@ -17,3 +17,7 @@ Get to know R; make a small data analysis library with [dplyr](https://github.co
 ### Testing your setup
 
 You should be able to run this from the command line without failure: `$ R -e "library(dplyr); library(rmeetupdemo); library(ggvis); d <- create_immigration_df()"`. Warnings are OK.
+
+### Tutorial
+
+The HTML presentation used in the session can be viewed with [this link](https://dl.dropboxusercontent.com/u/104325750/tutorial.html). It it the rendered version of `rmeetupdemo/tutorial.Rmd` and includes example output from the interactive session.
