@@ -49,6 +49,7 @@ The distribution of yearly immigration quantities
 imm_growth[complete.cases(imm_growth$percentage_change),] %>%
   group_by(time) %>%
   summarise(total_immigration = sum(value)) %>%
+  data.frame() %>%
   ggvis(~total_immigration) %>%
   layer_densities(adjust = input_slider(.1, 2, value = 1, step = .1, label = "Bandwidth adjustment"))
 
